@@ -1,0 +1,55 @@
+.card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    width: 90%;
+  
+    h3 {
+      margin-bottom: 5px;
+    }
+  
+    p {
+      margin-bottom: 10px;
+    }
+  
+    .priority {
+      padding: 5px;
+      color: #fff;
+      border-radius: 3px;
+      margin-bottom: 5px;
+      color: black;
+  
+      &.low {
+        background-color: green;
+      }
+  
+      &.medium {
+        background-color: yellow;
+      }
+  
+      &.high {
+        background-color: red;
+      }
+    }
+  
+    .status {
+      padding: 5px;
+      border-radius: 3px;
+      &.completed {
+        background-color: green;
+        color: #fff;
+      }
+      &.incomplete {
+        background-color: red;
+        color: #fff;
+      }
+    }
+  
+    .buttons {
+      button {
+        margin-right: 5px;
+      }
+    }
+  }
+  

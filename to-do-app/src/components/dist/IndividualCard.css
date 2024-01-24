@@ -1,0 +1,44 @@
+.card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  width: 90%;
+}
+.card h3 {
+  margin-bottom: 5px;
+}
+.card p {
+  margin-bottom: 10px;
+}
+.card .priority {
+  padding: 5px;
+  color: #fff;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  color: black;
+}
+.card .priority.low {
+  background-color: green;
+}
+.card .priority.medium {
+  background-color: yellow;
+}
+.card .priority.high {
+  background-color: red;
+}
+.card .status {
+  padding: 5px;
+  border-radius: 3px;
+}
+.card .status.completed {
+  background-color: green;
+  color: #fff;
+}
+.card .status.incomplete {
+  background-color: red;
+  color: #fff;
+}
+.card .buttons button {
+  margin-right: 5px;
+}
