@@ -3,7 +3,10 @@ import "./Form.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { addTodo } from "../redux/actions/todoActions";
 import { TodoState } from "../redux/reducers/todoReducer";
-import { setCurrentCard, editTodo } from "../redux/actions/dist/todoActions";
+import { setCurrentCard, editTodo } from "../redux/actions/todoActions";
+
+
+
 
 const Form: React.FC = () => {
   const dispatch = useDispatch();
@@ -18,7 +21,8 @@ const Form: React.FC = () => {
   const [priority, setPriority] = useState("medium");
   const [completionStatus, setCompletionStatus] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e : React.FormEvent) => {
+    e.preventDefault();
     if (!currentCard)
       dispatch(addTodo(title, description, priority, completionStatus));
     else dispatch(editTodo(currentCard.id, title, description, priority));

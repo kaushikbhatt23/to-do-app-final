@@ -4,7 +4,7 @@ var react_1 = require("react");
 require("./Form.scss");
 var react_redux_1 = require("react-redux");
 var todoActions_1 = require("../redux/actions/todoActions");
-var todoActions_2 = require("../redux/actions/dist/todoActions");
+var todoActions_2 = require("../redux/actions/todoActions");
 var Form = function () {
     var dispatch = react_redux_1.useDispatch();
     var currentCard = react_redux_1.useSelector(function (state) {
@@ -16,7 +16,8 @@ var Form = function () {
     var _b = react_1.useState(""), description = _b[0], setDescription = _b[1];
     var _c = react_1.useState("medium"), priority = _c[0], setPriority = _c[1];
     var _d = react_1.useState(false), completionStatus = _d[0], setCompletionStatus = _d[1];
-    var handleSubmit = function () {
+    var handleSubmit = function (e) {
+        e.preventDefault();
         if (!currentCard)
             dispatch(todoActions_1.addTodo(title, description, priority, completionStatus));
         else

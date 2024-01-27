@@ -1,6 +1,7 @@
 // Reducer.ts
 import * as actionTypes from "../actions/todoActionTypes";
 import { v4 as uuidv4 } from "uuid";
+import pubsub from "../../pubsub";
 
 export interface Todo {
   id: string;
@@ -15,26 +16,28 @@ export interface TodoState {
   filter: string;
   current_card_id: string | null;
   sortBy : string;
+  loading: boolean;
+  error: string | null;
 }
 
-const getInitialState = (): TodoState => {
-  const storedTodos = localStorage.getItem("todos");
-  return {
-    todos: storedTodos ? JSON.parse(storedTodos) : [],
-    filter: "all",
-    current_card_id: null,
-    sortBy: "none",
-  };
+
+const initialState: TodoState = {
+  todos:[],
+  filter: "all",
+  current_card_id: null,
+  sortBy: "none",
+  loading: true,
+  error: null,
+  
 };
 
-const initialState: TodoState = getInitialState();
-
-const updateLocalStorage = (todos: Todo[]) => {
-  localStorage.setItem("todos", JSON.stringify(todos));
-};
 
 const todoReducer = (state = initialState, action: any): TodoState => {
   switch (action.type) {
+    case actionTypes.UPDATE_FROM_INDEXEDDB:
+      return {
+        ...state,todos:action.payload.todos
+      };
     case actionTypes.ADD_TODO:
       const newTodo: Todo = {
         id: uuidv4(),
@@ -47,7 +50,7 @@ const todoReducer = (state = initialState, action: any): TodoState => {
         ...state,
         todos: [...state.todos, newTodo],
       };
-      updateLocalStorage(updatedAddState.todos);
+      pubsub.publish('addTodo',{todo:newTodo})
       return updatedAddState;
 
     case actionTypes.DELETE_TODO:
@@ -55,7 +58,7 @@ const todoReducer = (state = initialState, action: any): TodoState => {
         ...state,
         todos: state.todos.filter((todo) => todo.id !== action.payload.id),
       };
-      updateLocalStorage(updatedDeleteState.todos);
+      pubsub.publish('deleteTodo',{id:action.payload.id})
       return updatedDeleteState;
 
     case actionTypes.TASK_COMPLETED:
@@ -65,7 +68,12 @@ const todoReducer = (state = initialState, action: any): TodoState => {
           : todo
       );
       const updatedCompleteState = { ...state, todos: updatedCompletedTodos };
-      updateLocalStorage(updatedCompleteState.todos);
+      const updatedTodoTask=state.todos.find((todo)=>todo.id===action.payload.id);
+      const newUpdatedTodoTask={
+        ...updatedTodoTask,
+        completed: !updatedTodoTask!.completed,
+      }
+      pubsub.publish('editTodo',{updatedTodo: newUpdatedTodoTask})
       return updatedCompleteState;
 
     case actionTypes.SET_FILTER:
@@ -91,7 +99,14 @@ const todoReducer = (state = initialState, action: any): TodoState => {
             : todo
         ),
       };
-      updateLocalStorage(updatedEditState.todos);
+      const Todo=state.todos.find((todo)=>todo.id===action.payload.id);
+      const updatedTodo={
+        ...Todo,
+        title: action.payload.title,
+        description: action.payload.description,
+        priority: action.payload.priority,
+      }
+      pubsub.publish('editTodo',{updatedTodo: updatedTodo})
       return updatedEditState;
 
     default:

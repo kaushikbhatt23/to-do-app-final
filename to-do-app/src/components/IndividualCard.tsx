@@ -44,7 +44,7 @@ const IndividualCard: React.FC<CardProps> = ({
       <div className="buttons">
         <button onClick={onDelete}>Delete</button>
         <button onClick={onEdit}>Edit</button>
-        <button disabled={completed} onClick={onCompleted}>
+        <button onClick={onCompleted}>
           Completed
         </button>
       </div>

@@ -21,22 +21,20 @@ exports.__esModule = true;
 // Reducer.ts
 var actionTypes = require("../actions/todoActionTypes");
 var uuid_1 = require("uuid");
-var getInitialState = function () {
-    var storedTodos = localStorage.getItem("todos");
-    return {
-        todos: storedTodos ? JSON.parse(storedTodos) : [],
-        filter: "all",
-        current_card_id: null,
-        sortBy: "none"
-    };
-};
-var initialState = getInitialState();
-var updateLocalStorage = function (todos) {
-    localStorage.setItem("todos", JSON.stringify(todos));
+var pubsub_1 = require("../../pubsub");
+var initialState = {
+    todos: [],
+    filter: "all",
+    current_card_id: null,
+    sortBy: "none",
+    loading: true,
+    error: null
 };
 var todoReducer = function (state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
+        case actionTypes.UPDATE_FROM_INDEXEDDB:
+            return __assign(__assign({}, state), { todos: action.payload.todos });
         case actionTypes.ADD_TODO:
             var newTodo = {
                 id: uuid_1.v4(),
@@ -46,11 +44,11 @@ var todoReducer = function (state, action) {
                 completed: false
             };
             var updatedAddState = __assign(__assign({}, state), { todos: __spreadArrays(state.todos, [newTodo]) });
-            updateLocalStorage(updatedAddState.todos);
+            pubsub_1["default"].publish('addTodo', { todo: newTodo });
             return updatedAddState;
         case actionTypes.DELETE_TODO:
             var updatedDeleteState = __assign(__assign({}, state), { todos: state.todos.filter(function (todo) { return todo.id !== action.payload.id; }) });
-            updateLocalStorage(updatedDeleteState.todos);
+            pubsub_1["default"].publish('deleteTodo', { id: action.payload.id });
             return updatedDeleteState;
         case actionTypes.TASK_COMPLETED:
             var updatedCompletedTodos = state.todos.map(function (todo) {
@@ -58,7 +56,9 @@ var todoReducer = function (state, action) {
                     ? __assign(__assign({}, todo), { completed: !todo.completed }) : todo;
             });
             var updatedCompleteState = __assign(__assign({}, state), { todos: updatedCompletedTodos });
-            updateLocalStorage(updatedCompleteState.todos);
+            var updatedTodoTask = state.todos.find(function (todo) { return todo.id === action.payload.id; });
+            var newUpdatedTodoTask = __assign(__assign({}, updatedTodoTask), { completed: !updatedTodoTask.completed });
+            pubsub_1["default"].publish('editTodo', { updatedTodo: newUpdatedTodoTask });
             return updatedCompleteState;
         case actionTypes.SET_FILTER:
             return __assign(__assign({}, state), { filter: action.payload.filter });
@@ -71,7 +71,9 @@ var todoReducer = function (state, action) {
                     return todo.id === action.payload.id
                         ? __assign(__assign({}, todo), { title: action.payload.title, description: action.payload.description, priority: action.payload.priority }) : todo;
                 }) });
-            updateLocalStorage(updatedEditState.todos);
+            var Todo = state.todos.find(function (todo) { return todo.id === action.payload.id; });
+            var updatedTodo = __assign(__assign({}, Todo), { title: action.payload.title, description: action.payload.description, priority: action.payload.priority });
+            pubsub_1["default"].publish('editTodo', { updatedTodo: updatedTodo });
             return updatedEditState;
         default:
             return state;

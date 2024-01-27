@@ -1,5 +1,6 @@
 // Actions.ts
 import * as actionTypes from "./todoActionTypes";
+import { Todo } from "../reducers/todoReducer";
 
 export const addTodo = (
   title: string,
@@ -55,3 +56,11 @@ export const sortBy = (sortBy: string) => ({
   type: actionTypes.SORT_BY,
   payload: { sortBy },
 });
+
+
+
+export const updateFromIndexeddb = (todos: Todo[]) => ({
+  type: actionTypes.UPDATE_FROM_INDEXEDDB,
+  payload: { todos},
+});
+

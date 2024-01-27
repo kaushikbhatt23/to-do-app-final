@@ -26,6 +26,6 @@ var IndividualCard = function (_a) {
         react_1["default"].createElement("div", { className: "buttons" },
             react_1["default"].createElement("button", { onClick: onDelete }, "Delete"),
             react_1["default"].createElement("button", { onClick: onEdit }, "Edit"),
-            react_1["default"].createElement("button", { disabled: completed, onClick: onCompleted }, "Completed"))));
+            react_1["default"].createElement("button", { onClick: onCompleted }, "Completed"))));
 };
 exports["default"] = IndividualCard;
