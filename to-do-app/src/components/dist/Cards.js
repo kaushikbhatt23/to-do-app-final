@@ -8,7 +8,6 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 exports.__esModule = true;
 exports.Cards = void 0;
-var react_1 = require("react");
 var react_redux_1 = require("react-redux");
 var IndividualCard_1 = require("./IndividualCard");
 require("./Cards.scss");
@@ -50,7 +49,5 @@ exports.Cards = function () {
             sortedData = __spreadArrays(high_1.concat(medium_1, low_1));
             break;
     }
-    return (react_1["default"].createElement("div", { className: "container" }, sortedData.map(function (item) {
-        return (react_1["default"].createElement(IndividualCard_1["default"], { key: item.id, id: item.id, title: item.title, description: item.description, priority: item.priority, completed: item.completed }));
-    })));
+    return (React.createElement("div", { className: "card-container" }, sortedData.map(function (item) { return (React.createElement(IndividualCard_1["default"], { key: item.id, id: item.id, title: item.title, description: item.description, priority: item.priority, completed: item.completed })); })));
 };

@@ -1,11 +1,32 @@
 {
   "todos": [
     {
-      "id": "3b67e816-db7a-40e5-ba3b-1e970819c3b3",
-      "title": "card 1 ",
-      "description": "card 1",
+      "id": "fe298844-aca2-41c0-890f-2865908303b9",
+      "title": "CP",
+      "description": "Do some Cp",
       "priority": "medium",
       "completed": false
+    },
+    {
+      "id": "6b7c6d54-7cd8-4d95-9ffa-ab9e1cc8c6ec",
+      "title": "Reading ",
+      "description": "Do some reading",
+      "priority": "low",
+      "completed": false
+    },
+    {
+      "id": "5773c2af-2fc2-4c2b-90d5-2aae0530ff3f",
+      "title": "Shopping",
+      "description": "Do some shopping",
+      "priority": "high",
+      "completed": true
+    },
+    {
+      "id": "ac3c9053-25dd-4b9b-b262-f7f284cfaf3d",
+      "title": "System Design",
+      "description": "Do some system design",
+      "priority": "medium",
+      "completed": true
     }
   ]
 }

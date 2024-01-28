@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import { TodoState } from "../redux/reducers/todoReducer";
 import IndividualCard from "./IndividualCard";
@@ -44,19 +43,17 @@ export const Cards = () => {
   }
 
   return (
-    <div className="container">
-      {sortedData.map((item) => {
-        return (
-          <IndividualCard
-            key={item.id}
-            id={item.id}
-            title={item.title}
-            description={item.description}
-            priority={item.priority}
-            completed={item.completed}
-          />
-        );
-      })}
+    <div className="card-container">
+      {sortedData.map((item) => (
+        <IndividualCard
+          key={item.id}
+          id={item.id}
+          title={item.title}
+          description={item.description}
+          priority={item.priority}
+          completed={item.completed}
+        />
+      ))}
     </div>
   );
 };

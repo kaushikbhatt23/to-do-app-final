@@ -1,44 +1,58 @@
 .card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 5px;
-  width: 90%;
-}
-.card h3 {
-  margin-bottom: 5px;
-}
-.card p {
-  margin-bottom: 10px;
-}
-.card .priority {
-  padding: 5px;
-  color: #fff;
-  border-radius: 3px;
-  margin-bottom: 5px;
+  background-color: white;
   color: black;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  height: 80px;
 }
-.card .priority.low {
-  background-color: green;
+.card:last-child {
+  margin-bottom: 0;
 }
-.card .priority.medium {
-  background-color: yellow;
+.card.completed {
+  background-color: #88b9ee;
 }
-.card .priority.high {
-  background-color: red;
+.card input {
+  margin-right: 10px;
 }
-.card .status {
-  padding: 5px;
+.card .actions {
+  display: flex;
+  cursor: pointer;
+}
+.card .actions span {
+  margin-left: 10px;
+  font-size: 18px;
+}
+.card .actions span:first-child {
+  margin-left: 0;
+}
+.card .task-details {
+  flex: 1;
+}
+.card .task-details h3 {
+  margin: 0 0 5px;
+  font-size: 18px;
+}
+.card .task-details p {
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+.card .task-details .priority {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 3px 8px;
+  font-size: 12px;
   border-radius: 3px;
 }
-.card .status.completed {
-  background-color: green;
-  color: #fff;
+.card .task-details .priority.low {
+  background-color: #28a745;
 }
-.card .status.incomplete {
-  background-color: red;
-  color: #fff;
+.card .task-details .priority.medium {
+  background-color: #ffc107;
 }
-.card .buttons button {
-  margin-right: 5px;
+.card .task-details .priority.high {
+  background-color: #dc3545;
 }

@@ -11,21 +11,48 @@ var IndividualCard = function (_a) {
     var onDelete = function () {
         dispatch(todoActions_1.deleteTodo(id));
     };
-    var onEdit = function () {
-        dispatch(todoActions_1.setCurrentCard(id));
-    };
     var onCompleted = function () {
         dispatch(todoActions_1.taskCompleted(id));
     };
-    return (react_1["default"].createElement("div", { className: "card" },
-        react_1["default"].createElement("h3", null, title),
-        react_1["default"].createElement("p", null, description),
-        react_1["default"].createElement("div", { className: "priority " + priority.toLowerCase() }, priority),
-        react_1["default"].createElement("div", { className: "status " + (completed ? "completed" : "incomplete") }, completed ? "Completed" : "Incomplete"),
-        react_1["default"].createElement("br", null),
-        react_1["default"].createElement("div", { className: "buttons" },
-            react_1["default"].createElement("button", { onClick: onDelete }, "Delete"),
-            react_1["default"].createElement("button", { onClick: onEdit }, "Edit"),
-            react_1["default"].createElement("button", { onClick: onCompleted }, "Completed"))));
+    var _b = react_1.useState(false), isModalOpen = _b[0], setIsModalOpen = _b[1];
+    var openModal = function () {
+        setIsModalOpen(true);
+    };
+    var closeModal = function () {
+        setIsModalOpen(false);
+    };
+    var _c = react_1.useState(title), editTitle = _c[0], setEditTitle = _c[1];
+    var _d = react_1.useState(description), editDescription = _d[0], setEditDescription = _d[1];
+    var _e = react_1.useState(priority), editPriority = _e[0], setEditPriority = _e[1];
+    var handleSubmit = function (e) {
+        e.preventDefault();
+        dispatch(todoActions_1.editTodo(id, editTitle, editDescription, editPriority));
+        closeModal();
+    };
+    return (react_1["default"].createElement(react_1["default"].Fragment, null,
+        react_1["default"].createElement("div", { className: "card " + (completed ? "completed" : "") },
+            react_1["default"].createElement("input", { type: "checkbox", checked: completed, onChange: onCompleted }),
+            react_1["default"].createElement("div", { className: "task-details" },
+                react_1["default"].createElement("h3", null, title),
+                react_1["default"].createElement("p", null, description),
+                react_1["default"].createElement("span", { className: "priority " + priority }, priority)),
+            react_1["default"].createElement("div", { className: "actions" },
+                react_1["default"].createElement("span", { onClick: onDelete }, "\uD83D\uDDD1"),
+                react_1["default"].createElement("span", { onClick: openModal }, "\u270E"))),
+        isModalOpen && (react_1["default"].createElement("div", { className: "modal-overlay" },
+            react_1["default"].createElement("div", { className: "modal" },
+                react_1["default"].createElement("form", { onSubmit: handleSubmit },
+                    react_1["default"].createElement("h2", null, "Edit Task"),
+                    react_1["default"].createElement("label", { htmlFor: "title" }, "Title:"),
+                    react_1["default"].createElement("input", { type: "text", id: "title", name: "title", value: editTitle, onChange: function (e) { return setEditTitle(e.target.value); }, required: true }),
+                    react_1["default"].createElement("label", { htmlFor: "description" }, "Description:"),
+                    react_1["default"].createElement("textarea", { id: "description", name: "description", value: editDescription, onChange: function (e) { return setEditDescription(e.target.value); } }),
+                    react_1["default"].createElement("label", { htmlFor: "priority" }, "Priority:"),
+                    react_1["default"].createElement("select", { id: "priority", name: "priority", value: editPriority, onChange: function (e) { return setEditPriority(e.target.value); } },
+                        react_1["default"].createElement("option", { value: "low" }, "Low"),
+                        react_1["default"].createElement("option", { value: "medium" }, "Medium"),
+                        react_1["default"].createElement("option", { value: "high" }, "High")),
+                    react_1["default"].createElement("button", null, "Add Task"),
+                    react_1["default"].createElement("button", { onClick: closeModal }, "Cancel")))))));
 };
 exports["default"] = IndividualCard;

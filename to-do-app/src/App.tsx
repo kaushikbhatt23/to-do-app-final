@@ -1,6 +1,5 @@
 import React ,{ useEffect} from 'react';
-import './App.css';
-import Form from './components/Form';
+import './App.scss';
 import { Cards } from './components/Cards';
 import Navbar from './components/Navbar';
 import pubsub from './pubsub';
@@ -33,11 +32,10 @@ function App() {
   }, []);
   return (
     <div className="App">
-       <Form/>
-       <div className='right-container'> 
-          <Navbar/>
-          <Cards/>
-       </div>
+      <h1>TODO LIST</h1>
+      <Navbar/>
+      <br/>
+      <Cards/>
     </div>
 
   );
