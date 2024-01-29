@@ -1,31 +1,38 @@
 {
   "todos": [
     {
-      "id": "fe298844-aca2-41c0-890f-2865908303b9",
-      "title": "CP",
-      "description": "Do some Cp",
+      "id": "4cd8b4b1-b7f7-4ca8-96ef-1b08273544ad",
+      "title": "Shopping ",
+      "description": "Go to shopping in the evening and buy fruits",
       "priority": "medium",
       "completed": false
     },
     {
-      "id": "6b7c6d54-7cd8-4d95-9ffa-ab9e1cc8c6ec",
-      "title": "Reading ",
-      "description": "Do some reading",
+      "id": "bfb03bb3-0572-427d-bb66-05b669065697",
+      "title": "Read a book ",
+      "description": "Read a non fiction book by sunday",
+      "priority": "medium",
+      "completed": true
+    },
+    {
+      "id": "f52c7aed-1205-4f13-ae8d-cf48fb3468a3",
+      "title": "Do dsa",
+      "description": "Solve 2 dsa questions ",
+      "priority": "high",
+      "completed": false
+    },
+    {
+      "id": "08aacffc-fa7a-4e87-a8c9-940727b004fb",
+      "title": "System design",
+      "description": "Learn system design",
       "priority": "low",
       "completed": false
     },
     {
-      "id": "5773c2af-2fc2-4c2b-90d5-2aae0530ff3f",
-      "title": "Shopping",
-      "description": "Do some shopping",
-      "priority": "high",
-      "completed": true
-    },
-    {
-      "id": "ac3c9053-25dd-4b9b-b262-f7f284cfaf3d",
-      "title": "System Design",
-      "description": "Do some system design",
-      "priority": "medium",
+      "id": "d488528d-97d3-437e-8b81-7e154c00e52f",
+      "title": "Do coding ",
+      "description": "Do coding on sunday",
+      "priority": "low",
       "completed": true
     }
   ]

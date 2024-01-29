@@ -1,4 +1,5 @@
 // indexedDBService.ts
+import { initializeTodosFromIndexedDB } from "../services";
 
 export interface Todo {
   id: string;
@@ -11,8 +12,8 @@ export interface Todo {
 class IndexedDBService {
   private static instance: IndexedDBService;
 
-  private dbName = 'TodoDB';
-  private storeName = 'Todos';
+  private dbName = "TodoDB";
+  private storeName = "Todos";
 
   private db: IDBDatabase | null = null;
 
@@ -33,8 +34,8 @@ class IndexedDBService {
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
       if (!db.objectStoreNames.contains(this.storeName)) {
-        db.createObjectStore(this.storeName, { keyPath: 'id' });
-      }    
+        db.createObjectStore(this.storeName, { keyPath: "id" });
+      }
     };
 
     request.onsuccess = (event) => {
@@ -42,34 +43,89 @@ class IndexedDBService {
     };
 
     request.onerror = () => {
-      console.error('Error opening IndexedDB');
+      console.error("Error opening IndexedDB");
     };
+  }
+
+  public async getAllTodos(): Promise<Todo[]> {
+    await this.waitForDBInitialization();
+
+    return new Promise((resolve, reject) => {
+      if (!this.db) {
+        reject(new Error("IndexedDB not initialized."));
+      }
+
+      const transaction = this.db!.transaction([this.storeName], "readonly");
+      const store = transaction.objectStore(this.storeName);
+      const getAllRequest = store.getAll();
+
+      getAllRequest.onsuccess = (event) => {
+        const todos = (event.target as IDBRequest).result;
+        resolve(todos);
+      };
+
+      getAllRequest.onerror = () => {
+        reject(new Error("Error fetching todos from IndexedDB"));
+      };
+    });
   }
 
   public addTodo(todo: Todo): void {
     if (this.db) {
-      const transaction = this.db.transaction([this.storeName], 'readwrite');
+      const transaction = this.db.transaction([this.storeName], "readwrite");
       const store = transaction.objectStore(this.storeName);
-      store.add(todo);
+      const addRequest = store.add(todo);
+
+      addRequest.onsuccess = () => {
+        console.log("Todo added successfully.");
+      };
+
+      addRequest.onerror = (event) => {
+        console.error("Error adding todo:", (event.target as IDBRequest).error);
+        initializeTodosFromIndexedDB();
+      };
     }
   }
 
   public deleteTodo(todoId: string): void {
     if (this.db) {
-      const transaction = this.db.transaction([this.storeName], 'readwrite');
+      const transaction = this.db.transaction([this.storeName], "readwrite");
       const store = transaction.objectStore(this.storeName);
-      store.delete(todoId);
+      const deleteRequest = store.delete(todoId);
+
+      deleteRequest.onsuccess = () => {
+        console.log("Todo delete successfully.");
+      };
+
+      deleteRequest.onerror = (event) => {
+        console.error(
+          "Error deleting todo:",
+          (event.target as IDBRequest).error
+        );
+        initializeTodosFromIndexedDB();
+      };
     }
   }
 
   public editTodo(updatedTodo: Todo): void {
     if (this.db) {
-      const transaction = this.db.transaction([this.storeName], 'readwrite');
+      const transaction = this.db.transaction([this.storeName], "readwrite");
       const store = transaction.objectStore(this.storeName);
-      store.put(updatedTodo);
+      const editRequest = store.put(updatedTodo);
+
+      editRequest.onsuccess = () => {
+        console.log("Todo edited successfully.");
+      };
+
+      editRequest.onerror = (event) => {
+        console.error(
+          "Error editing todo:",
+          (event.target as IDBRequest).error
+        );
+        initializeTodosFromIndexedDB();
+      };
     }
   }
-
 
   private async waitForDBInitialization(): Promise<void> {
     return new Promise((resolve) => {
@@ -85,34 +141,9 @@ class IndexedDBService {
     });
   }
 
-  public async getAllTodos(): Promise<Todo[]> {
-    await this.waitForDBInitialization();
-
-    return new Promise((resolve, reject) => {
-      if (!this.db) {
-        reject(new Error('IndexedDB not initialized.'));
-      }
-
-      const transaction = this.db!.transaction([this.storeName], 'readonly');
-      const store = transaction.objectStore(this.storeName);
-      const getAllRequest = store.getAll();
-
-      getAllRequest.onsuccess = (event) => {
-        const todos = (event.target as IDBRequest).result;
-        resolve(todos);
-      };
-
-      getAllRequest.onerror = () => {
-        reject(new Error('Error fetching todos from IndexedDB'));
-      };
-    });
-  }
-
-
-
   public storeDataInIndexedDB(data: Todo[]): void {
     if (this.db) {
-      const transaction = this.db.transaction([this.storeName], 'readwrite');
+      const transaction = this.db.transaction([this.storeName], "readwrite");
       const store = transaction.objectStore(this.storeName);
 
       data.forEach((todo) => {
@@ -120,7 +151,6 @@ class IndexedDBService {
       });
     }
   }
-
 }
 
 export default IndexedDBService;

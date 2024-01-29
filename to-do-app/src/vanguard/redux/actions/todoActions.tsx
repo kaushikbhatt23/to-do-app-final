@@ -36,10 +36,6 @@ export const setFilter = (filter: string) => ({
   payload: { filter },
 });
 
-export const setCurrentCard = (id: string | null) => ({
-  type: actionTypes.SET_CURRENT_TODO,
-  payload: { id },
-});
 
 export const editTodo = (
   id: string,
@@ -51,16 +47,12 @@ export const editTodo = (
   payload: { id, title, description, priority },
 });
 
-
 export const sortBy = (sortBy: string) => ({
   type: actionTypes.SORT_BY,
   payload: { sortBy },
 });
 
-
-
 export const updateFromIndexeddb = (todos: Todo[]) => ({
   type: actionTypes.UPDATE_FROM_INDEXEDDB,
-  payload: { todos},
+  payload: { todos },
 });
-

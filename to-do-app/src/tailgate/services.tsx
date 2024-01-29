@@ -7,36 +7,39 @@ const apiUrl = 'http://localhost:3000/todos';
 
 
 
+export const initializeTodosFromIndexedDB = async () => {
+  try {
+    const todos = await indexedDBService.getAllTodos();
+
+    if (todos.length === 0) {
+      // Data not found in IndexedDB, fetch from the JSON server
+      try {
+        const response = await fetch(apiUrl);
+        const todosFromServer = await response.json();
+
+        // Store the fetched data in IndexedDB
+        indexedDBService.storeDataInIndexedDB(todosFromServer);
+
+        // Publish the fetched data
+        pubsub.publish('todosFetched', todosFromServer);
+      } catch (error  : any) {
+        console.error('Error fetching todos from the JSON server:', error.message);
+      }
+    } else {
+      // Data found in IndexedDB, publish the existing data
+      pubsub.publish('todosFetched', todos);
+    }
+  } catch (error : any) {
+    console.error('Error fetching todos from IndexedDB:', error.message);
+  }
+};
+
+
+
 const subscribeToTodoEvents = () => {
 
 
   const fetchSubscriptionToken = pubsub.subscribe('fetchTodos', async (topic, data) => {
-    const initializeTodosFromIndexedDB = async () => {
-      try {
-        const todos = await indexedDBService.getAllTodos();
-
-        if (todos.length === 0) {
-          // Data not found in IndexedDB, fetch from the JSON server
-          try {
-            const response = await fetch(apiUrl);
-            const todosFromServer = await response.json();
-
-            // Store the fetched data in IndexedDB
-            indexedDBService.storeDataInIndexedDB(todosFromServer);
-
-            // Publish the fetched data
-            pubsub.publish('todosFetched', todosFromServer);
-          } catch (error  : any) {
-            console.error('Error fetching todos from the JSON server:', error.message);
-          }
-        } else {
-          // Data found in IndexedDB, publish the existing data
-          pubsub.publish('todosFetched', todos);
-        }
-      } catch (error : any) {
-        console.error('Error fetching todos from IndexedDB:', error.message);
-      }
-    };
 
     initializeTodosFromIndexedDB();
   });
@@ -60,7 +63,7 @@ const subscribeToTodoEvents = () => {
       updateTodo(data.updatedTodo.id,data.updatedTodo);
     });
   
-    // Return an object with all subscription tokens for potential cleanup
+
     return {
       fetchSubscriptionToken,
       addSubscriptionToken,

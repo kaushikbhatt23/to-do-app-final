@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { TodoState } from "../redux/reducers/todoReducer";
 import { setFilter, sortBy } from "../redux/actions/todoActions";
 import "./Navbar.scss";
-import { addTodo } from "../redux/actions/dist/todoActions";
+import { addTodo } from "../redux/actions/todoActions";
 
 const Navbar: React.FC = () => {
   const filter = useSelector((state: TodoState) => state.filter);

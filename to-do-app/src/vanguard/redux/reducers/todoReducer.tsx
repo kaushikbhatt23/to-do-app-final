@@ -1,7 +1,7 @@
 // Reducer.ts
 import * as actionTypes from "../actions/todoActionTypes";
 import { v4 as uuidv4 } from "uuid";
-import pubsub from "../../pubsub";
+import pubsub from "../../../pubsub";
 
 export interface Todo {
   id: string;
@@ -15,28 +15,27 @@ export interface TodoState {
   todos: Todo[];
   filter: string;
   current_card_id: string | null;
-  sortBy : string;
+  sortBy: string;
   loading: boolean;
   error: string | null;
 }
 
-
 const initialState: TodoState = {
-  todos:[],
+  todos: [],
   filter: "all",
   current_card_id: null,
   sortBy: "none",
   loading: true,
   error: null,
-  
 };
-
 
 const todoReducer = (state = initialState, action: any): TodoState => {
   switch (action.type) {
     case actionTypes.UPDATE_FROM_INDEXEDDB:
       return {
-        ...state,todos:action.payload.todos
+        ...state,
+        loading:false,
+        todos: action.payload.todos,
       };
     case actionTypes.ADD_TODO:
       const newTodo: Todo = {
@@ -50,7 +49,7 @@ const todoReducer = (state = initialState, action: any): TodoState => {
         ...state,
         todos: [...state.todos, newTodo],
       };
-      pubsub.publish('addTodo',{todo:newTodo})
+      pubsub.publish("addTodo", { todo: newTodo });
       return updatedAddState;
 
     case actionTypes.DELETE_TODO:
@@ -58,7 +57,7 @@ const todoReducer = (state = initialState, action: any): TodoState => {
         ...state,
         todos: state.todos.filter((todo) => todo.id !== action.payload.id),
       };
-      pubsub.publish('deleteTodo',{id:action.payload.id})
+      pubsub.publish("deleteTodo", { id: action.payload.id });
       return updatedDeleteState;
 
     case actionTypes.TASK_COMPLETED:
@@ -68,12 +67,14 @@ const todoReducer = (state = initialState, action: any): TodoState => {
           : todo
       );
       const updatedCompleteState = { ...state, todos: updatedCompletedTodos };
-      const updatedTodoTask=state.todos.find((todo)=>todo.id===action.payload.id);
-      const newUpdatedTodoTask={
+      const updatedTodoTask = state.todos.find(
+        (todo) => todo.id === action.payload.id
+      );
+      const newUpdatedTodoTask = {
         ...updatedTodoTask,
         completed: !updatedTodoTask!.completed,
-      }
-      pubsub.publish('editTodo',{updatedTodo: newUpdatedTodoTask})
+      };
+      pubsub.publish("editTodo", { updatedTodo: newUpdatedTodoTask });
       return updatedCompleteState;
 
     case actionTypes.SET_FILTER:
@@ -81,9 +82,6 @@ const todoReducer = (state = initialState, action: any): TodoState => {
 
     case actionTypes.SORT_BY:
       return { ...state, sortBy: action.payload.sortBy };
-
-    case actionTypes.SET_CURRENT_TODO:
-      return { ...state, current_card_id: action.payload.id };
 
     case actionTypes.EDIT_TODO:
       const updatedEditState = {
@@ -99,14 +97,14 @@ const todoReducer = (state = initialState, action: any): TodoState => {
             : todo
         ),
       };
-      const Todo=state.todos.find((todo)=>todo.id===action.payload.id);
-      const updatedTodo={
+      const Todo = state.todos.find((todo) => todo.id === action.payload.id);
+      const updatedTodo = {
         ...Todo,
         title: action.payload.title,
         description: action.payload.description,
         priority: action.payload.priority,
-      }
-      pubsub.publish('editTodo',{updatedTodo: updatedTodo})
+      };
+      pubsub.publish("editTodo", { updatedTodo: updatedTodo });
       return updatedEditState;
 
     default:

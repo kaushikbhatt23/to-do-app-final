@@ -1,5 +1,4 @@
 "use strict";
-// indexedDBService.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -37,10 +36,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+// indexedDBService.ts
+var services_1 = require("../services");
 var IndexedDBService = /** @class */ (function () {
     function IndexedDBService() {
-        this.dbName = 'TodoDB';
-        this.storeName = 'Todos';
+        this.dbName = "TodoDB";
+        this.storeName = "Todos";
         this.db = null;
         this.initDatabase();
     }
@@ -56,35 +57,83 @@ var IndexedDBService = /** @class */ (function () {
         request.onupgradeneeded = function (event) {
             var db = event.target.result;
             if (!db.objectStoreNames.contains(_this.storeName)) {
-                db.createObjectStore(_this.storeName, { keyPath: 'id' });
+                db.createObjectStore(_this.storeName, { keyPath: "id" });
             }
         };
         request.onsuccess = function (event) {
             _this.db = event.target.result;
         };
         request.onerror = function () {
-            console.error('Error opening IndexedDB');
+            console.error("Error opening IndexedDB");
         };
+    };
+    IndexedDBService.prototype.getAllTodos = function () {
+        return __awaiter(this, void 0, Promise, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.waitForDBInitialization()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, new Promise(function (resolve, reject) {
+                                if (!_this.db) {
+                                    reject(new Error("IndexedDB not initialized."));
+                                }
+                                var transaction = _this.db.transaction([_this.storeName], "readonly");
+                                var store = transaction.objectStore(_this.storeName);
+                                var getAllRequest = store.getAll();
+                                getAllRequest.onsuccess = function (event) {
+                                    var todos = event.target.result;
+                                    resolve(todos);
+                                };
+                                getAllRequest.onerror = function () {
+                                    reject(new Error("Error fetching todos from IndexedDB"));
+                                };
+                            })];
+                }
+            });
+        });
     };
     IndexedDBService.prototype.addTodo = function (todo) {
         if (this.db) {
-            var transaction = this.db.transaction([this.storeName], 'readwrite');
+            var transaction = this.db.transaction([this.storeName], "readwrite");
             var store = transaction.objectStore(this.storeName);
-            store.add(todo);
+            var addRequest = store.add(todo);
+            addRequest.onsuccess = function () {
+                console.log("Todo added successfully.");
+            };
+            addRequest.onerror = function (event) {
+                console.error("Error adding todo:", event.target.error);
+                services_1.initializeTodosFromIndexedDB();
+            };
         }
     };
     IndexedDBService.prototype.deleteTodo = function (todoId) {
         if (this.db) {
-            var transaction = this.db.transaction([this.storeName], 'readwrite');
+            var transaction = this.db.transaction([this.storeName], "readwrite");
             var store = transaction.objectStore(this.storeName);
-            store["delete"](todoId);
+            var deleteRequest = store["delete"](todoId);
+            deleteRequest.onsuccess = function () {
+                console.log("Todo delete successfully.");
+            };
+            deleteRequest.onerror = function (event) {
+                console.error("Error deleting todo:", event.target.error);
+                services_1.initializeTodosFromIndexedDB();
+            };
         }
     };
     IndexedDBService.prototype.editTodo = function (updatedTodo) {
         if (this.db) {
-            var transaction = this.db.transaction([this.storeName], 'readwrite');
+            var transaction = this.db.transaction([this.storeName], "readwrite");
             var store = transaction.objectStore(this.storeName);
-            store.put(updatedTodo);
+            var editRequest = store.put(updatedTodo);
+            editRequest.onsuccess = function () {
+                console.log("Todo edited successfully.");
+            };
+            editRequest.onerror = function (event) {
+                console.error("Error editing todo:", event.target.error);
+                services_1.initializeTodosFromIndexedDB();
+            };
         }
     };
     IndexedDBService.prototype.waitForDBInitialization = function () {
@@ -105,36 +154,9 @@ var IndexedDBService = /** @class */ (function () {
             });
         });
     };
-    IndexedDBService.prototype.getAllTodos = function () {
-        return __awaiter(this, void 0, Promise, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.waitForDBInitialization()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, new Promise(function (resolve, reject) {
-                                if (!_this.db) {
-                                    reject(new Error('IndexedDB not initialized.'));
-                                }
-                                var transaction = _this.db.transaction([_this.storeName], 'readonly');
-                                var store = transaction.objectStore(_this.storeName);
-                                var getAllRequest = store.getAll();
-                                getAllRequest.onsuccess = function (event) {
-                                    var todos = event.target.result;
-                                    resolve(todos);
-                                };
-                                getAllRequest.onerror = function () {
-                                    reject(new Error('Error fetching todos from IndexedDB'));
-                                };
-                            })];
-                }
-            });
-        });
-    };
     IndexedDBService.prototype.storeDataInIndexedDB = function (data) {
         if (this.db) {
-            var transaction = this.db.transaction([this.storeName], 'readwrite');
+            var transaction = this.db.transaction([this.storeName], "readwrite");
             var store_1 = transaction.objectStore(this.storeName);
             data.forEach(function (todo) {
                 store_1.put(todo);

@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.updateTodo = exports.deleteTodo = exports.addTodo = void 0;
-var apiUrl = 'http://localhost:3000/todos';
+var apiUrl = "http://localhost:3000/todos";
 // Function to add a new TODO
 function addTodo(newTodo) {
     return __awaiter(this, void 0, Promise, function () {
@@ -47,9 +47,9 @@ function addTodo(newTodo) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, fetch(apiUrl, {
-                            method: 'POST',
+                            method: "POST",
                             headers: {
-                                'Content-Type': 'application/json'
+                                "Content-Type": "application/json"
                             },
                             body: JSON.stringify(newTodo)
                         })];
@@ -58,11 +58,11 @@ function addTodo(newTodo) {
                     if (!response.ok) {
                         throw new Error("Failed to add TODO: " + response.statusText);
                     }
-                    console.log('TODO added successfully');
+                    console.log("TODO added successfully");
                     return [3 /*break*/, 3];
                 case 2:
                     error_1 = _a.sent();
-                    console.error('Error adding TODO:', error_1.message);
+                    console.error("Error adding TODO:", error_1.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -79,18 +79,18 @@ function deleteTodo(id) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, fetch(apiUrl + "/" + id, {
-                            method: 'DELETE'
+                            method: "DELETE"
                         })];
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
                         throw new Error("Failed to delete TODO: " + response.statusText);
                     }
-                    console.log('TODO deleted successfully');
+                    console.log("TODO deleted successfully");
                     return [3 /*break*/, 3];
                 case 2:
                     error_2 = _a.sent();
-                    console.error('Error deleting TODO:', error_2.message);
+                    console.error("Error deleting TODO:", error_2.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -107,9 +107,9 @@ function updateTodo(id, updatedTodo) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, fetch(apiUrl + "/" + id, {
-                            method: 'PUT',
+                            method: "PUT",
                             headers: {
-                                'Content-Type': 'application/json'
+                                "Content-Type": "application/json"
                             },
                             body: JSON.stringify(updatedTodo)
                         })];
@@ -118,11 +118,11 @@ function updateTodo(id, updatedTodo) {
                     if (!response.ok) {
                         throw new Error("Failed to update TODO: " + response.statusText);
                     }
-                    console.log('TODO updated successfully');
+                    console.log("TODO updated successfully");
                     return [3 /*break*/, 3];
                 case 2:
                     error_3 = _a.sent();
-                    console.error('Error updating TODO:', error_3.message);
+                    console.error("Error updating TODO:", error_3.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
