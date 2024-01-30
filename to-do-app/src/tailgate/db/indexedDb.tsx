@@ -9,8 +9,8 @@ export interface Todo {
   completed: boolean;
 }
 
-class IndexedDBService {
-  private static instance: IndexedDBService;
+class TodoService {
+  private static instance: TodoService;
 
   private dbName = "TodoDB";
   private storeName = "Todos";
@@ -21,11 +21,11 @@ class IndexedDBService {
     this.initDatabase();
   }
 
-  public static getInstance(): IndexedDBService {
-    if (!IndexedDBService.instance) {
-      IndexedDBService.instance = new IndexedDBService();
+  public static getInstance(): TodoService {
+    if (!TodoService.instance) {
+      TodoService.instance = new TodoService();
     }
-    return IndexedDBService.instance;
+    return TodoService.instance;
   }
 
   private initDatabase(): void {
@@ -153,4 +153,4 @@ class IndexedDBService {
   }
 }
 
-export default IndexedDBService;
+export default TodoService;

@@ -36,12 +36,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.updateTodo = exports.deleteTodo = exports.addTodo = void 0;
+exports.updateTodo = exports.deleteTodo = exports.addTodo = exports.fetchTodosFromServer = void 0;
 var apiUrl = "http://localhost:3000/todos";
+function fetchTodosFromServer() {
+    return __awaiter(this, void 0, Promise, function () {
+        var response, todos, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 3, , 4]);
+                    return [4 /*yield*/, fetch(apiUrl)];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch TODOs: " + response.statusText);
+                    }
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    todos = _a.sent();
+                    console.log("TODOs fetched successfully from the server");
+                    return [2 /*return*/, todos];
+                case 3:
+                    error_1 = _a.sent();
+                    console.error("Error fetching TODOs from the server:", error_1.message);
+                    throw error_1; // Re-throw the error to be caught by the calling function if needed
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.fetchTodosFromServer = fetchTodosFromServer;
 // Function to add a new TODO
 function addTodo(newTodo) {
     return __awaiter(this, void 0, Promise, function () {
-        var response, error_1;
+        var response, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -61,8 +89,8 @@ function addTodo(newTodo) {
                     console.log("TODO added successfully");
                     return [3 /*break*/, 3];
                 case 2:
-                    error_1 = _a.sent();
-                    console.error("Error adding TODO:", error_1.message);
+                    error_2 = _a.sent();
+                    console.error("Error adding TODO:", error_2.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -73,7 +101,7 @@ exports.addTodo = addTodo;
 // Function to delete a TODO by ID
 function deleteTodo(id) {
     return __awaiter(this, void 0, Promise, function () {
-        var response, error_2;
+        var response, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -89,8 +117,8 @@ function deleteTodo(id) {
                     console.log("TODO deleted successfully");
                     return [3 /*break*/, 3];
                 case 2:
-                    error_2 = _a.sent();
-                    console.error("Error deleting TODO:", error_2.message);
+                    error_3 = _a.sent();
+                    console.error("Error deleting TODO:", error_3.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -101,7 +129,7 @@ exports.deleteTodo = deleteTodo;
 // Function to update a TODO by ID
 function updateTodo(id, updatedTodo) {
     return __awaiter(this, void 0, Promise, function () {
-        var response, error_3;
+        var response, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -121,8 +149,8 @@ function updateTodo(id, updatedTodo) {
                     console.log("TODO updated successfully");
                     return [3 /*break*/, 3];
                 case 2:
-                    error_3 = _a.sent();
-                    console.error("Error updating TODO:", error_3.message);
+                    error_4 = _a.sent();
+                    console.error("Error updating TODO:", error_4.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

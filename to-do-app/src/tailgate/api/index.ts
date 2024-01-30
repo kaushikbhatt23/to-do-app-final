@@ -2,7 +2,31 @@ import { Todo } from "../../vanguard/redux/reducers/todoReducer";
 
 const apiUrl = "http://localhost:3000/todos";
 
+
+
+
+export async function fetchTodosFromServer(): Promise<Todo[]> {
+  try {
+    const response = await fetch(apiUrl);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch TODOs: ${response.statusText}`);
+    }
+
+    const todos = await response.json();
+    console.log("TODOs fetched successfully from the server");
+    return todos;
+  } catch (error: any) {
+    console.error("Error fetching TODOs from the server:", error.message);
+    throw error; // Re-throw the error to be caught by the calling function if needed
+  }
+}
+
+
+
 // Function to add a new TODO
+
+
 export async function addTodo(newTodo: Todo): Promise<void> {
   try {
     const response = await fetch(apiUrl, {

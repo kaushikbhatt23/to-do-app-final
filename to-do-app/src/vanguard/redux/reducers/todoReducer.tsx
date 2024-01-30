@@ -34,7 +34,7 @@ const todoReducer = (state = initialState, action: any): TodoState => {
     case actionTypes.UPDATE_FROM_INDEXEDDB:
       return {
         ...state,
-        loading:false,
+        loading: false,
         todos: action.payload.todos,
       };
     case actionTypes.ADD_TODO:

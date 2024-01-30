@@ -38,20 +38,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 // indexedDBService.ts
 var services_1 = require("../services");
-var IndexedDBService = /** @class */ (function () {
-    function IndexedDBService() {
+var TodoService = /** @class */ (function () {
+    function TodoService() {
         this.dbName = "TodoDB";
         this.storeName = "Todos";
         this.db = null;
         this.initDatabase();
     }
-    IndexedDBService.getInstance = function () {
-        if (!IndexedDBService.instance) {
-            IndexedDBService.instance = new IndexedDBService();
+    TodoService.getInstance = function () {
+        if (!TodoService.instance) {
+            TodoService.instance = new TodoService();
         }
-        return IndexedDBService.instance;
+        return TodoService.instance;
     };
-    IndexedDBService.prototype.initDatabase = function () {
+    TodoService.prototype.initDatabase = function () {
         var _this = this;
         var request = indexedDB.open(this.dbName, 3);
         request.onupgradeneeded = function (event) {
@@ -67,7 +67,7 @@ var IndexedDBService = /** @class */ (function () {
             console.error("Error opening IndexedDB");
         };
     };
-    IndexedDBService.prototype.getAllTodos = function () {
+    TodoService.prototype.getAllTodos = function () {
         return __awaiter(this, void 0, Promise, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -94,7 +94,7 @@ var IndexedDBService = /** @class */ (function () {
             });
         });
     };
-    IndexedDBService.prototype.addTodo = function (todo) {
+    TodoService.prototype.addTodo = function (todo) {
         if (this.db) {
             var transaction = this.db.transaction([this.storeName], "readwrite");
             var store = transaction.objectStore(this.storeName);
@@ -108,7 +108,7 @@ var IndexedDBService = /** @class */ (function () {
             };
         }
     };
-    IndexedDBService.prototype.deleteTodo = function (todoId) {
+    TodoService.prototype.deleteTodo = function (todoId) {
         if (this.db) {
             var transaction = this.db.transaction([this.storeName], "readwrite");
             var store = transaction.objectStore(this.storeName);
@@ -122,7 +122,7 @@ var IndexedDBService = /** @class */ (function () {
             };
         }
     };
-    IndexedDBService.prototype.editTodo = function (updatedTodo) {
+    TodoService.prototype.editTodo = function (updatedTodo) {
         if (this.db) {
             var transaction = this.db.transaction([this.storeName], "readwrite");
             var store = transaction.objectStore(this.storeName);
@@ -136,7 +136,7 @@ var IndexedDBService = /** @class */ (function () {
             };
         }
     };
-    IndexedDBService.prototype.waitForDBInitialization = function () {
+    TodoService.prototype.waitForDBInitialization = function () {
         return __awaiter(this, void 0, Promise, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -154,7 +154,7 @@ var IndexedDBService = /** @class */ (function () {
             });
         });
     };
-    IndexedDBService.prototype.storeDataInIndexedDB = function (data) {
+    TodoService.prototype.storeDataInIndexedDB = function (data) {
         if (this.db) {
             var transaction = this.db.transaction([this.storeName], "readwrite");
             var store_1 = transaction.objectStore(this.storeName);
@@ -163,6 +163,6 @@ var IndexedDBService = /** @class */ (function () {
             });
         }
     };
-    return IndexedDBService;
+    return TodoService;
 }());
-exports["default"] = IndexedDBService;
+exports["default"] = TodoService;
