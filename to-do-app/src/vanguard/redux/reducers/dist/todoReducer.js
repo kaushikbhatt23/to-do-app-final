@@ -25,10 +25,8 @@ var pubsub_1 = require("../../../pubsub");
 var initialState = {
     todos: [],
     filter: "all",
-    current_card_id: null,
     sortBy: "none",
-    loading: true,
-    error: null
+    loading: true
 };
 var todoReducer = function (state, action) {
     if (state === void 0) { state = initialState; }
@@ -47,8 +45,8 @@ var todoReducer = function (state, action) {
             pubsub_1["default"].publish("addTodo", { todo: newTodo });
             return updatedAddState;
         case actionTypes.DELETE_TODO:
-            var updatedDeleteState = __assign(__assign({}, state), { todos: state.todos.filter(function (todo) { return todo.id !== action.payload.id; }) });
-            pubsub_1["default"].publish("deleteTodo", { id: action.payload.id });
+            var updatedDeleteState = __assign(__assign({}, state), { todos: state.todos.filter(function (todo) { return todo.id !== action.payload.todo.id; }) });
+            pubsub_1["default"].publish("deleteTodo", { todo: action.payload.todo });
             return updatedDeleteState;
         case actionTypes.TASK_COMPLETED:
             var updatedCompletedTodos = state.todos.map(function (todo) {
@@ -56,22 +54,39 @@ var todoReducer = function (state, action) {
                     ? __assign(__assign({}, todo), { completed: !todo.completed }) : todo;
             });
             var updatedCompleteState = __assign(__assign({}, state), { todos: updatedCompletedTodos });
-            var updatedTodoTask = state.todos.find(function (todo) { return todo.id === action.payload.id; });
-            var newUpdatedTodoTask = __assign(__assign({}, updatedTodoTask), { completed: !updatedTodoTask.completed });
-            pubsub_1["default"].publish("editTodo", { updatedTodo: newUpdatedTodoTask });
+            var currentTodoTask = state.todos.find(function (todo) { return todo.id === action.payload.id; });
+            var newUpdatedTodoTask = __assign(__assign({}, currentTodoTask), { completed: !currentTodoTask.completed });
+            pubsub_1["default"].publish("editTodo", {
+                updatedTodo: newUpdatedTodoTask,
+                previousTodo: currentTodoTask
+            });
             return updatedCompleteState;
         case actionTypes.SET_FILTER:
             return __assign(__assign({}, state), { filter: action.payload.filter });
         case actionTypes.SORT_BY:
             return __assign(__assign({}, state), { sortBy: action.payload.sortBy });
+        case actionTypes.ADDING_TO_DB_FAILED:
+            console.log("Reducer : addition to db failed");
+            return __assign(__assign({}, state), { todos: state.todos.filter(function (todo) { return todo.id !== action.payload.id; }) });
+        case actionTypes.DELETION_FROM_DB_FAILED:
+            console.log("Reducer : deletion from db failed");
+            return __assign(__assign({}, state), { todos: __spreadArrays(state.todos, [action.payload.todo]) });
+        case actionTypes.EDIT_IN_DB_FAILED:
+            console.log("Reducer : update to db failed");
+            return __assign(__assign({}, state), { todos: state.todos.map(function (todo) {
+                    return todo.id === action.payload.todo.id ? action.payload.todo : todo;
+                }) });
         case actionTypes.EDIT_TODO:
             var updatedEditState = __assign(__assign({}, state), { todos: state.todos.map(function (todo) {
                     return todo.id === action.payload.id
                         ? __assign(__assign({}, todo), { title: action.payload.title, description: action.payload.description, priority: action.payload.priority }) : todo;
                 }) });
-            var Todo = state.todos.find(function (todo) { return todo.id === action.payload.id; });
-            var updatedTodo = __assign(__assign({}, Todo), { title: action.payload.title, description: action.payload.description, priority: action.payload.priority });
-            pubsub_1["default"].publish("editTodo", { updatedTodo: updatedTodo });
+            var previousTodo = state.todos.find(function (todo) { return todo.id === action.payload.id; });
+            var updatedTodo = __assign(__assign({}, previousTodo), { title: action.payload.title, description: action.payload.description, priority: action.payload.priority });
+            pubsub_1["default"].publish("editTodo", {
+                updatedTodo: updatedTodo,
+                previousTodo: previousTodo
+            });
             return updatedEditState;
         default:
             return state;

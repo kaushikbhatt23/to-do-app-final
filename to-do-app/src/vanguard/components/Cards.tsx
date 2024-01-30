@@ -47,11 +47,7 @@ export const Cards = () => {
       {sortedData.map((item) => (
         <IndividualCard
           key={item.id}
-          id={item.id}
-          title={item.title}
-          description={item.description}
-          priority={item.priority}
-          completed={item.completed}
+          todo={item}
         />
       ))}
     </div>

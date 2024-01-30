@@ -14,19 +14,15 @@ export interface Todo {
 export interface TodoState {
   todos: Todo[];
   filter: string;
-  current_card_id: string | null;
   sortBy: string;
   loading: boolean;
-  error: string | null;
 }
 
 const initialState: TodoState = {
   todos: [],
   filter: "all",
-  current_card_id: null,
   sortBy: "none",
   loading: true,
-  error: null,
 };
 
 const todoReducer = (state = initialState, action: any): TodoState => {
@@ -55,9 +51,9 @@ const todoReducer = (state = initialState, action: any): TodoState => {
     case actionTypes.DELETE_TODO:
       const updatedDeleteState = {
         ...state,
-        todos: state.todos.filter((todo) => todo.id !== action.payload.id),
+        todos: state.todos.filter((todo) => todo.id !== action.payload.todo.id),
       };
-      pubsub.publish("deleteTodo", { id: action.payload.id });
+      pubsub.publish("deleteTodo", { todo: action.payload.todo });
       return updatedDeleteState;
 
     case actionTypes.TASK_COMPLETED:
@@ -67,14 +63,17 @@ const todoReducer = (state = initialState, action: any): TodoState => {
           : todo
       );
       const updatedCompleteState = { ...state, todos: updatedCompletedTodos };
-      const updatedTodoTask = state.todos.find(
+      const currentTodoTask = state.todos.find(
         (todo) => todo.id === action.payload.id
       );
       const newUpdatedTodoTask = {
-        ...updatedTodoTask,
-        completed: !updatedTodoTask!.completed,
+        ...currentTodoTask,
+        completed: !currentTodoTask!.completed,
       };
-      pubsub.publish("editTodo", { updatedTodo: newUpdatedTodoTask });
+      pubsub.publish("editTodo", {
+        updatedTodo: newUpdatedTodoTask,
+        previousTodo: currentTodoTask,
+      });
       return updatedCompleteState;
 
     case actionTypes.SET_FILTER:
@@ -82,6 +81,29 @@ const todoReducer = (state = initialState, action: any): TodoState => {
 
     case actionTypes.SORT_BY:
       return { ...state, sortBy: action.payload.sortBy };
+
+    case actionTypes.ADDING_TO_DB_FAILED:
+      console.log("Reducer : addition to db failed");
+      return {
+        ...state,
+        todos: state.todos.filter((todo) => todo.id !== action.payload.id),
+      };
+
+    case actionTypes.DELETION_FROM_DB_FAILED:
+      console.log("Reducer : deletion from db failed");
+      return {
+        ...state,
+        todos: [...state.todos, action.payload.todo],
+      };
+
+    case actionTypes.EDIT_IN_DB_FAILED:
+      console.log("Reducer : update to db failed");
+      return {
+        ...state,
+        todos: state.todos.map((todo) =>
+          todo.id === action.payload.todo.id ? action.payload.todo : todo
+        ),
+      };
 
     case actionTypes.EDIT_TODO:
       const updatedEditState = {
@@ -97,14 +119,19 @@ const todoReducer = (state = initialState, action: any): TodoState => {
             : todo
         ),
       };
-      const Todo = state.todos.find((todo) => todo.id === action.payload.id);
+      const previousTodo = state.todos.find(
+        (todo) => todo.id === action.payload.id
+      );
       const updatedTodo = {
-        ...Todo,
+        ...previousTodo,
         title: action.payload.title,
         description: action.payload.description,
         priority: action.payload.priority,
       };
-      pubsub.publish("editTodo", { updatedTodo: updatedTodo });
+      pubsub.publish("editTodo", {
+        updatedTodo: updatedTodo,
+        previousTodo: previousTodo,
+      });
       return updatedEditState;
 
     default:

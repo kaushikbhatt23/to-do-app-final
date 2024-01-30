@@ -1,5 +1,5 @@
 // components/Card.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./IndividualCard.scss";
 import { useDispatch } from "react-redux";
 import {
@@ -7,29 +7,20 @@ import {
   deleteTodo,
   taskCompleted,
 } from "../redux/actions/todoActions";
+import { Todo } from "../redux/reducers/todoReducer";
 
 interface CardProps {
-  id: string;
-  title: string;
-  description: string;
-  priority: string;
-  completed: boolean;
+  todo: Todo;
 }
 
-const IndividualCard: React.FC<CardProps> = ({
-  id,
-  title,
-  description,
-  priority,
-  completed,
-}) => {
+const IndividualCard: React.FC<CardProps> = ({ todo }) => {
   const dispatch = useDispatch();
   const onDelete = () => {
-    dispatch(deleteTodo(id));
+    dispatch(deleteTodo(todo));
   };
 
   const onCompleted = () => {
-    dispatch(taskCompleted(id));
+    dispatch(taskCompleted(todo.id));
   };
 
   const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
@@ -37,28 +28,38 @@ const IndividualCard: React.FC<CardProps> = ({
     setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    setEditTitle(todo.title);
+    setEditDescription(todo.description);
+    setEditPriority(todo.priority);
+  }, [isModalOpen]);
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  const [editTitle, setEditTitle] = useState(title);
-  const [editDescription, setEditDescription] = useState(description);
-  const [editPriority, setEditPriority] = useState(priority);
+  const [editTitle, setEditTitle] = useState(todo.title);
+  const [editDescription, setEditDescription] = useState(todo.description);
+  const [editPriority, setEditPriority] = useState(todo.priority);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(editTodo(id, editTitle, editDescription, editPriority));
+    dispatch(editTodo(todo.id, editTitle, editDescription, editPriority));
     closeModal();
   };
 
   return (
     <>
-      <div className={`card ${completed ? "completed" : ""}`}>
-        <input type="checkbox" checked={completed} onChange={onCompleted} />
+      <div className={`card ${todo.completed ? "completed" : ""}`}>
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={onCompleted}
+        />
         <div className="task-details">
-          <h3>{title}</h3>
-          <p>{description}</p>
-          <span className={`priority ${priority}`}>{priority}</span>
+          <h3>{todo.title}</h3>
+          <p>{todo.description}</p>
+          <span className={`priority ${todo.priority}`}>{todo.priority}</span>
         </div>
         <div className="actions">
           <span onClick={onDelete}>&#128465;</span>

@@ -17,10 +17,10 @@ export const addTodo = (
   },
 });
 
-export const deleteTodo = (id: string) => ({
+export const deleteTodo = (todo  : Todo) => ({
   type: actionTypes.DELETE_TODO,
   payload: {
-    id,
+    todo,
   },
 });
 
@@ -55,4 +55,21 @@ export const sortBy = (sortBy: string) => ({
 export const updateFromIndexeddb = (todos: Todo[]) => ({
   type: actionTypes.UPDATE_FROM_INDEXEDDB,
   payload: { todos },
+});
+
+
+export const revertAddTodoOperation= (id : string) => ({
+  type: actionTypes.ADDING_TO_DB_FAILED,
+  payload: { id },
+});
+
+
+export const revertDeleteTodoOperation= (todo : Todo) => ({
+  type: actionTypes.DELETION_FROM_DB_FAILED,
+  payload: { todo },
+});
+
+export const revertEditTodoOperation= (todo : Todo) => ({
+  type: actionTypes.EDIT_IN_DB_FAILED,
+  payload: { todo },
 });

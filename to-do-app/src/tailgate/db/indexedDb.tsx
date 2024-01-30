@@ -77,12 +77,12 @@ class TodoService {
       const addRequest = store.add(todo);
 
       addRequest.onsuccess = () => {
-        console.log("Todo added successfully.");
+        console.log("Todo added successfully in indexeddb.");
       };
 
       addRequest.onerror = (event) => {
         console.error("Error adding todo:", (event.target as IDBRequest).error);
-        initializeTodosFromIndexedDB();
+        throw (event.target as IDBRequest).error;
       };
     }
   }
@@ -94,7 +94,7 @@ class TodoService {
       const deleteRequest = store.delete(todoId);
 
       deleteRequest.onsuccess = () => {
-        console.log("Todo delete successfully.");
+        console.log("Todo deleted successfully from indexeddb.");
       };
 
       deleteRequest.onerror = (event) => {
@@ -102,7 +102,7 @@ class TodoService {
           "Error deleting todo:",
           (event.target as IDBRequest).error
         );
-        initializeTodosFromIndexedDB();
+        throw (event.target as IDBRequest).error;
       };
     }
   }
@@ -114,7 +114,7 @@ class TodoService {
       const editRequest = store.put(updatedTodo);
 
       editRequest.onsuccess = () => {
-        console.log("Todo edited successfully.");
+        console.log("Todo edited successfully in indexeddb.");
       };
 
       editRequest.onerror = (event) => {
@@ -122,7 +122,7 @@ class TodoService {
           "Error editing todo:",
           (event.target as IDBRequest).error
         );
-        initializeTodosFromIndexedDB();
+        throw (event.target as IDBRequest).error;
       };
     }
   }

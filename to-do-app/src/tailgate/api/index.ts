@@ -2,9 +2,6 @@ import { Todo } from "../../vanguard/redux/reducers/todoReducer";
 
 const apiUrl = "http://localhost:3000/todos";
 
-
-
-
 export async function fetchTodosFromServer(): Promise<Todo[]> {
   try {
     const response = await fetch(apiUrl);
@@ -22,12 +19,11 @@ export async function fetchTodosFromServer(): Promise<Todo[]> {
   }
 }
 
-
-
 // Function to add a new TODO
 
-
-export async function addTodo(newTodo: Todo): Promise<void> {
+export async function addTodo(
+  newTodo: Todo
+): Promise<{ success: boolean; error?: string }> {
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -38,34 +34,43 @@ export async function addTodo(newTodo: Todo): Promise<void> {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to add TODO: ${response.statusText}`);
+      return {
+        success: false,
+        error: `Failed to add TODO: ${response.statusText}`,
+      };
     }
-
-    console.log("TODO added successfully");
+    return { success: true };
   } catch (error: any) {
-    console.error("Error adding TODO:", error.message);
+    return { success: false, error: error };
   }
 }
 
 // Function to delete a TODO by ID
-export async function deleteTodo(id: string): Promise<void> {
+export async function deleteTodo(
+  id: string
+): Promise<{ success: boolean; error?: string }> {
   try {
     const response = await fetch(`${apiUrl}/${id}`, {
       method: "DELETE",
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to delete TODO: ${response.statusText}`);
+      return {
+        success: false,
+        error: `Failed to delete TODO: ${response.statusText}`,
+      };
     }
-
-    console.log("TODO deleted successfully");
+    return { success: true };
   } catch (error: any) {
-    console.error("Error deleting TODO:", error.message);
+    return { success: false, error: error };
   }
 }
 
 // Function to update a TODO by ID
-export async function updateTodo(id: string, updatedTodo: Todo): Promise<void> {
+export async function updateTodo(
+  id: string,
+  updatedTodo: Todo
+): Promise<{ success: boolean; error?: string }> {
   try {
     const response = await fetch(`${apiUrl}/${id}`, {
       method: "PUT",
@@ -76,11 +81,14 @@ export async function updateTodo(id: string, updatedTodo: Todo): Promise<void> {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to update TODO: ${response.statusText}`);
+      return {
+        success: false,
+        error: `Failed to update TODO: ${response.statusText}`,
+      };
     }
 
-    console.log("TODO updated successfully");
+    return { success: true };
   } catch (error: any) {
-    console.error("Error updating TODO:", error.message);
+    return { success: false, error: error };
   }
 }

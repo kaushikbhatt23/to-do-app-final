@@ -89,20 +89,98 @@ var subscribeToTodoEvents = function () {
         });
     }); });
     // Subscribe to the 'newTodoAdded' event
-    var addSubscriptionToken = pubsub_1["default"].subscribe("addTodo", function (topic, data) {
-        todoService.addTodo(data.todo);
-        api_1.addTodo(data.todo);
-    });
+    var addSubscriptionToken = pubsub_1["default"].subscribe("addTodo", function (topic, data) { return __awaiter(void 0, void 0, void 0, function () {
+        var firstTrySuccessful, error;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    firstTrySuccessful = false;
+                    try {
+                        todoService.addTodo(data.todo); // add to indexeddb
+                        firstTrySuccessful = true;
+                    }
+                    catch (error) {
+                        pubsub_1["default"].publish("addingTodoFailed", data.todo.id);
+                        console.log(error);
+                    }
+                    if (!firstTrySuccessful) return [3 /*break*/, 2];
+                    return [4 /*yield*/, api_1.addTodo(data.todo)];
+                case 1:
+                    error = (_a.sent()).error;
+                    if (error) {
+                        todoService.deleteTodo(data.todo.id);
+                        pubsub_1["default"].publish("addingTodoFailed", data.todo.id);
+                    }
+                    else {
+                        console.log("Todo added at server successfully");
+                    }
+                    _a.label = 2;
+                case 2: return [2 /*return*/];
+            }
+        });
+    }); });
     // Subscribe to the 'todoDeleted' event
-    var deleteSubscriptionToken = pubsub_1["default"].subscribe("deleteTodo", function (topic, data) {
-        todoService.deleteTodo(data.id);
-        api_1.deleteTodo(data.id);
-    });
+    var deleteSubscriptionToken = pubsub_1["default"].subscribe("deleteTodo", function (topic, data) { return __awaiter(void 0, void 0, void 0, function () {
+        var firstTrySuccessful, error;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    firstTrySuccessful = false;
+                    try {
+                        todoService.deleteTodo(data.todo.id);
+                        firstTrySuccessful = true;
+                    }
+                    catch (error) {
+                        console.log(error.message);
+                        pubsub_1["default"].publish("deletingTodoFailed", data.todo);
+                    }
+                    if (!firstTrySuccessful) return [3 /*break*/, 2];
+                    return [4 /*yield*/, api_1.deleteTodo(data.todo.id)];
+                case 1:
+                    error = (_a.sent()).error;
+                    if (error) {
+                        todoService.addTodo(data.todo);
+                        pubsub_1["default"].publish("deletingTodoFailed", data.todo);
+                    }
+                    else {
+                        console.log("Todo deleted at server successfully");
+                    }
+                    _a.label = 2;
+                case 2: return [2 /*return*/];
+            }
+        });
+    }); });
     // Subscribe to the 'todoEdited' event
-    var editSubscriptionToken = pubsub_1["default"].subscribe("editTodo", function (topic, data) {
-        todoService.editTodo(data.updatedTodo);
-        api_1.updateTodo(data.updatedTodo.id, data.updatedTodo);
-    });
+    var editSubscriptionToken = pubsub_1["default"].subscribe("editTodo", function (topic, data) { return __awaiter(void 0, void 0, void 0, function () {
+        var firstTrySuccessful, error;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    firstTrySuccessful = false;
+                    try {
+                        todoService.editTodo(data.updatedTodo);
+                        firstTrySuccessful = true;
+                    }
+                    catch (error) {
+                        pubsub_1["default"].publish("editingTodoFailed", data.previousTodo);
+                        console.log(error.message);
+                    }
+                    if (!firstTrySuccessful) return [3 /*break*/, 2];
+                    return [4 /*yield*/, api_1.updateTodo(data.updatedTodo.id, data.updatedTodo)];
+                case 1:
+                    error = (_a.sent()).error;
+                    if (error) {
+                        todoService.editTodo(data.previousTodo);
+                        pubsub_1["default"].publish("editingTodoFailed", data.previousTodo);
+                    }
+                    else {
+                        console.log("Todo updated at server successfully");
+                    }
+                    _a.label = 2;
+                case 2: return [2 /*return*/];
+            }
+        });
+    }); });
     return {
         fetchSubscriptionToken: fetchSubscriptionToken,
         addSubscriptionToken: addSubscriptionToken,

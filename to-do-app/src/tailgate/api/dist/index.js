@@ -84,14 +84,15 @@ function addTodo(newTodo) {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error("Failed to add TODO: " + response.statusText);
+                        return [2 /*return*/, {
+                                success: false,
+                                error: "Failed to add TODO: " + response.statusText
+                            }];
                     }
-                    console.log("TODO added successfully");
-                    return [3 /*break*/, 3];
+                    return [2 /*return*/, { success: true }];
                 case 2:
                     error_2 = _a.sent();
-                    console.error("Error adding TODO:", error_2.message);
-                    return [3 /*break*/, 3];
+                    return [2 /*return*/, { success: false, error: error_2 }];
                 case 3: return [2 /*return*/];
             }
         });
@@ -112,14 +113,15 @@ function deleteTodo(id) {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error("Failed to delete TODO: " + response.statusText);
+                        return [2 /*return*/, {
+                                success: false,
+                                error: "Failed to delete TODO: " + response.statusText
+                            }];
                     }
-                    console.log("TODO deleted successfully");
-                    return [3 /*break*/, 3];
+                    return [2 /*return*/, { success: true }];
                 case 2:
                     error_3 = _a.sent();
-                    console.error("Error deleting TODO:", error_3.message);
-                    return [3 /*break*/, 3];
+                    return [2 /*return*/, { success: false, error: error_3 }];
                 case 3: return [2 /*return*/];
             }
         });
@@ -144,14 +146,15 @@ function updateTodo(id, updatedTodo) {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error("Failed to update TODO: " + response.statusText);
+                        return [2 /*return*/, {
+                                success: false,
+                                error: "Failed to update TODO: " + response.statusText
+                            }];
                     }
-                    console.log("TODO updated successfully");
-                    return [3 /*break*/, 3];
+                    return [2 /*return*/, { success: true }];
                 case 2:
                     error_4 = _a.sent();
-                    console.error("Error updating TODO:", error_4.message);
-                    return [3 /*break*/, 3];
+                    return [2 /*return*/, { success: false, error: error_4 }];
                 case 3: return [2 /*return*/];
             }
         });

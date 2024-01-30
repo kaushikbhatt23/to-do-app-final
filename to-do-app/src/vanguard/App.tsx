@@ -8,6 +8,10 @@ import { updateFromIndexeddb } from "./redux/actions/todoActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { TodoState } from "./redux/reducers/todoReducer";
+import { revertAddTodoOperation,revertDeleteTodoOperation ,revertEditTodoOperation} from "./redux/actions/todoActions";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { showToast } from "./utils/ToastUtils";
 
 function App() {
   const dispatch = useDispatch();
@@ -19,6 +23,33 @@ function App() {
         dispatch(updateFromIndexeddb(todos));
       }
     );
+
+    const addingTodoFailedSubscription = pubsub.subscribe(
+      "addingTodoFailed",
+      (topic, id) => {
+        showToast('New todo cannot be added');
+        dispatch(revertAddTodoOperation(id));
+      }
+    );
+
+    const deletingTodoFailedSubscription = pubsub.subscribe(
+      "deletingTodoFailed",
+      (topic, todo) => {
+        showToast('Todo deletion failed');
+        dispatch(revertDeleteTodoOperation(todo));
+      }
+    );
+
+
+    const editingTodoFailedSubscription = pubsub.subscribe(
+      "editingTodoFailed",
+      (topic, todo) => {
+        showToast('Todo update failed');
+        dispatch(revertEditTodoOperation(todo));
+      }
+    );
+
+
     const {
       fetchSubscriptionToken,
       addSubscriptionToken,
@@ -29,6 +60,9 @@ function App() {
     pubsub.publish("fetchTodos", {});
 
     return () => {
+      pubsub.unsubscribe(editingTodoFailedSubscription);
+      pubsub.unsubscribe(deletingTodoFailedSubscription);
+      pubsub.unsubscribe(addingTodoFailedSubscription);
       pubsub.unsubscribe(initialFetchSubscription);
       pubsub.unsubscribe(fetchSubscriptionToken);
       pubsub.unsubscribe(addSubscriptionToken);
@@ -42,6 +76,7 @@ function App() {
         <p>Loading......</p>
       ) : (
         <div className="App">
+          <ToastContainer />
           <h1>TODO LIST</h1>
           <Navbar />
           <br />
