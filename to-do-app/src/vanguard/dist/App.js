@@ -21,15 +21,15 @@ function App() {
             dispatch(todoActions_1.updateFromIndexeddb(todos));
         });
         var addingTodoFailedSubscription = pubsub_1["default"].subscribe("addingTodoFailed", function (topic, id) {
-            ToastUtils_1.showToast('New todo cannot be added');
+            ToastUtils_1.showToast("New todo cannot be added");
             dispatch(todoActions_2.revertAddTodoOperation(id));
         });
         var deletingTodoFailedSubscription = pubsub_1["default"].subscribe("deletingTodoFailed", function (topic, todo) {
-            ToastUtils_1.showToast('Todo deletion failed');
+            ToastUtils_1.showToast("Todo deletion failed");
             dispatch(todoActions_2.revertDeleteTodoOperation(todo));
         });
         var editingTodoFailedSubscription = pubsub_1["default"].subscribe("editingTodoFailed", function (topic, todo) {
-            ToastUtils_1.showToast('Todo update failed');
+            ToastUtils_1.showToast("Todo update failed");
             dispatch(todoActions_2.revertEditTodoOperation(todo));
         });
         var _a = services_1["default"](), fetchSubscriptionToken = _a.fetchSubscriptionToken, addSubscriptionToken = _a.addSubscriptionToken, deleteSubscriptionToken = _a.deleteSubscriptionToken, editSubscriptionToken = _a.editSubscriptionToken;

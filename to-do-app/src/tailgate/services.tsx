@@ -48,17 +48,17 @@ const subscribeToTodoEvents = () => {
     async (topic, data) => {
       let firstTrySuccessful = false;
       try {
-        todoService.addTodo(data.todo); // add to indexeddb
+        await todoService.addTodo(data.todo); // add to indexeddb
         firstTrySuccessful = true;
       } catch (error: any) {
-        pubsub.publish("addingTodoFailed", data.todo.id);
+        pubsub.publish("addingTodoFailed", data.todo.id);          // addition to indexeddb failed so revert changes
         console.log(error);
       }
       if (firstTrySuccessful) {
         // if successfully added to indexeddb then add to server
         const { error } = await addTodo(data.todo);
         if (error) {
-          todoService.deleteTodo(data.todo.id);
+          todoService.deleteTodo(data.todo.id);            // addition to server failed so revert changes
           pubsub.publish("addingTodoFailed", data.todo.id);
         } else {
           console.log("Todo added at server successfully");
@@ -73,17 +73,17 @@ const subscribeToTodoEvents = () => {
     async (topic, data) => {
       let firstTrySuccessful = false;
       try {
-        todoService.deleteTodo(data.todo.id);
+        await todoService.deleteTodo(data.todo.id);       // delete todo from indexeddb
         firstTrySuccessful = true;
       } catch (error: any) {
-        console.log(error.message);
+        console.log(error.message);                 // deletion of todo on indexeddb failed so revert changes on ui
         pubsub.publish("deletingTodoFailed", data.todo);
       }
       if (firstTrySuccessful) {
         // if successfully deleted from indexeddb then delete from server
-        const { error } = await deleteTodo(data.todo.id);
+        const { error } = await deleteTodo(data.todo.id);     
         if (error) {
-          todoService.addTodo(data.todo);
+          todoService.addTodo(data.todo);          // if deletion from server fails then  revert changes
           pubsub.publish("deletingTodoFailed", data.todo);
         } else {
           console.log("Todo deleted at server successfully");
@@ -98,19 +98,19 @@ const subscribeToTodoEvents = () => {
     async (topic, data) => {
       let firstTrySuccessful = false;
       try {
-        todoService.editTodo(data.updatedTodo);
+        await todoService.editTodo(data.updatedTodo);       // update on indexeddb
         firstTrySuccessful = true;
       } catch (error: any) {
-        pubsub.publish("editingTodoFailed", data.previousTodo);
+        pubsub.publish("editingTodoFailed", data.previousTodo);  // if update on indexeddb fails then revert changes on ui
         console.log(error.message);
       }
       if (firstTrySuccessful) {
-        const { error } = await updateTodo(
+        const { error } = await updateTodo(      // update on server 
           data.updatedTodo.id,
           data.updatedTodo
         );
 
-        if (error) {
+        if (error) {       // if update on server fails then revert changes 
           todoService.editTodo(data.previousTodo);
           pubsub.publish("editingTodoFailed", data.previousTodo);
         } else {

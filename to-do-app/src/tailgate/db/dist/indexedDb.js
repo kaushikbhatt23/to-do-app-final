@@ -50,20 +50,28 @@ var TodoService = /** @class */ (function () {
         return TodoService.instance;
     };
     TodoService.prototype.initDatabase = function () {
-        var _this = this;
-        var request = indexedDB.open(this.dbName, 3);
-        request.onupgradeneeded = function (event) {
-            var db = event.target.result;
-            if (!db.objectStoreNames.contains(_this.storeName)) {
-                db.createObjectStore(_this.storeName, { keyPath: "id" });
-            }
-        };
-        request.onsuccess = function (event) {
-            _this.db = event.target.result;
-        };
-        request.onerror = function () {
-            console.error("Error opening IndexedDB");
-        };
+        return __awaiter(this, void 0, Promise, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        var request = indexedDB.open(_this.dbName, 3);
+                        request.onupgradeneeded = function (event) {
+                            var db = event.target.result;
+                            if (!db.objectStoreNames.contains(_this.storeName)) {
+                                db.createObjectStore(_this.storeName, { keyPath: "id" });
+                            }
+                        };
+                        request.onsuccess = function (event) {
+                            _this.db = event.target.result;
+                            resolve();
+                        };
+                        request.onerror = function () {
+                            console.error("Error opening IndexedDB");
+                            reject(new Error("Error opening IndexedDB"));
+                        };
+                    })];
+            });
+        });
     };
     TodoService.prototype.getAllTodos = function () {
         return __awaiter(this, void 0, Promise, function () {
@@ -93,46 +101,67 @@ var TodoService = /** @class */ (function () {
         });
     };
     TodoService.prototype.addTodo = function (todo) {
-        if (this.db) {
-            var transaction = this.db.transaction([this.storeName], "readwrite");
-            var store = transaction.objectStore(this.storeName);
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (!_this.db) {
+                reject(new Error("IndexedDB not initialized."));
+                return;
+            }
+            var transaction = _this.db.transaction([_this.storeName], "readwrite");
+            var store = transaction.objectStore(_this.storeName);
             var addRequest = store.add(todo);
             addRequest.onsuccess = function () {
-                console.log("Todo added successfully in indexeddb.");
+                console.log("Todo added successfully in IndexedDB.");
+                resolve();
             };
             addRequest.onerror = function (event) {
-                console.error("Error adding todo:", event.target.error);
-                throw event.target.error;
+                var error = event.target.error;
+                console.error("Error adding todo:", error);
+                reject(error);
             };
-        }
+        });
     };
     TodoService.prototype.deleteTodo = function (todoId) {
-        if (this.db) {
-            var transaction = this.db.transaction([this.storeName], "readwrite");
-            var store = transaction.objectStore(this.storeName);
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (!_this.db) {
+                reject(new Error("IndexedDB not initialized."));
+                return;
+            }
+            var transaction = _this.db.transaction([_this.storeName], "readwrite");
+            var store = transaction.objectStore(_this.storeName);
             var deleteRequest = store["delete"](todoId);
             deleteRequest.onsuccess = function () {
-                console.log("Todo deleted successfully from indexeddb.");
+                console.log("Todo deleted successfully from IndexedDB.");
+                resolve();
             };
             deleteRequest.onerror = function (event) {
-                console.error("Error deleting todo:", event.target.error);
-                throw event.target.error;
+                var error = event.target.error;
+                console.error("Error deleting todo:", error);
+                reject(error);
             };
-        }
+        });
     };
     TodoService.prototype.editTodo = function (updatedTodo) {
-        if (this.db) {
-            var transaction = this.db.transaction([this.storeName], "readwrite");
-            var store = transaction.objectStore(this.storeName);
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (!_this.db) {
+                reject(new Error("IndexedDB not initialized."));
+                return;
+            }
+            var transaction = _this.db.transaction([_this.storeName], "readwrite");
+            var store = transaction.objectStore(_this.storeName);
             var editRequest = store.put(updatedTodo);
             editRequest.onsuccess = function () {
-                console.log("Todo edited successfully in indexeddb.");
+                console.log("Todo edited successfully in IndexedDB.");
+                resolve();
             };
             editRequest.onerror = function (event) {
-                console.error("Error editing todo:", event.target.error);
-                throw event.target.error;
+                var error = event.target.error;
+                console.error("Error editing todo:", error);
+                reject(error);
             };
-        }
+        });
     };
     TodoService.prototype.waitForDBInitialization = function () {
         return __awaiter(this, void 0, Promise, function () {

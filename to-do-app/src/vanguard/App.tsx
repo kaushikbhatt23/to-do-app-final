@@ -8,9 +8,13 @@ import { updateFromIndexeddb } from "./redux/actions/todoActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { TodoState } from "./redux/reducers/todoReducer";
-import { revertAddTodoOperation,revertDeleteTodoOperation ,revertEditTodoOperation} from "./redux/actions/todoActions";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  revertAddTodoOperation,
+  revertDeleteTodoOperation,
+  revertEditTodoOperation,
+} from "./redux/actions/todoActions";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { showToast } from "./utils/ToastUtils";
 
 function App() {
@@ -27,7 +31,7 @@ function App() {
     const addingTodoFailedSubscription = pubsub.subscribe(
       "addingTodoFailed",
       (topic, id) => {
-        showToast('New todo cannot be added');
+        showToast("New todo cannot be added");
         dispatch(revertAddTodoOperation(id));
       }
     );
@@ -35,20 +39,18 @@ function App() {
     const deletingTodoFailedSubscription = pubsub.subscribe(
       "deletingTodoFailed",
       (topic, todo) => {
-        showToast('Todo deletion failed');
+        showToast("Todo deletion failed");
         dispatch(revertDeleteTodoOperation(todo));
       }
     );
 
-
     const editingTodoFailedSubscription = pubsub.subscribe(
       "editingTodoFailed",
       (topic, todo) => {
-        showToast('Todo update failed');
+        showToast("Todo update failed");
         dispatch(revertEditTodoOperation(todo));
       }
     );
-
 
     const {
       fetchSubscriptionToken,

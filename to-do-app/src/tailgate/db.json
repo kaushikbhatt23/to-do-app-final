@@ -1,158 +1,60 @@
 {
   "todos": [
     {
-      "id": "78666b97-d509-4bf9-ac4d-aa64c5113502",
-      "title": "Task1 ",
-      "description": "Do task 1",
-      "priority": "medium",
-      "completed": false
-    },
-    {
-      "id": "132ccdb3-e426-415a-8050-be373432c533",
-      "title": "Task 2",
-      "description": "Do task 2",
-      "priority": "low",
-      "completed": false
-    },
-    {
-      "id": "ff083a2c-b743-4416-9b40-e6b44fc3ea45",
-      "title": "Task 3",
-      "description": "Do task 3 by 10 pm today",
-      "priority": "low",
-      "completed": true
-    },
-    {
-      "id": "a8a391e6-2a98-410c-9284-443da542f981",
-      "title": "Task 5",
-      "description": "Do task 5",
-      "priority": "high",
-      "completed": true
-    },
-    {
-      "id": "3a4d199f-ff8a-4138-b3bc-aa2b841e3af5",
-      "title": "Task 6",
-      "description": "Do task 6",
-      "priority": "medium",
-      "completed": false
-    },
-    {
-      "id": "b8947640-de07-40a4-a3a4-1ec01ff5aced",
-      "title": "Task 4",
-      "description": "Do task 4",
-      "priority": "low",
-      "completed": true
-    },
-    {
-      "id": "877218dc-11df-4d5c-b1c7-966ad92c4985",
-      "title": "Task 8",
-      "description": "Do task 8",
-      "priority": "medium",
-      "completed": false
-    },
-    {
-      "id": "8da20824-1a03-4655-919a-f302b4638f49",
-      "title": "Task 7",
-      "description": "Do task 7",
-      "priority": "high",
-      "completed": false
-    },
-    {
-      "id": "584c72b2-2618-4cb7-b932-2b613c28ba25",
-      "title": "Task 10",
-      "description": "Do task 10",
-      "priority": "low",
-      "completed": false
-    },
-    {
-      "id": "f8c80a68-d400-4863-8ff8-ee5cdefb316d",
-      "title": "Task 9",
-      "description": "Do task 9 ",
-      "priority": "medium",
-      "completed": true
-    },
-    {
-      "id": "7c1cb70d-ae0d-431d-83d0-483ced0f30cc",
-      "title": "Task 12",
-      "description": "Do task 12",
-      "priority": "medium",
-      "completed": false
-    },
-    {
-      "id": "e0c7bea6-e4b3-43a3-b86e-8f327c4202ae",
+      "id": "ffc3afd0-1c89-4260-b53d-a3e2e30412f6",
       "title": "Task 1",
-      "description": "taks 1",
+      "description": "Task1 ",
       "priority": "medium",
       "completed": false
     },
     {
-      "id": "b0e79d06-3944-427d-9e68-a889bc88d6ca",
-      "title": "card 3",
-      "description": "card 3",
-      "priority": "medium",
-      "completed": true
-    },
-    {
-      "id": "c89a2463-3760-4c21-8536-efd83616f2c4",
-      "title": "card 2",
-      "description": "card 2",
-      "priority": "high",
-      "completed": true
-    },
-    {
-      "id": "20d9674a-75ee-4392-a6f7-027933b79281",
-      "title": "Task 1",
-      "description": "Task 1",
-      "priority": "medium",
-      "completed": true
-    },
-    {
-      "id": "a25559f1-6284-4fe2-8061-3e4eed4fcc93",
-      "title": "Task 2",
-      "description": "Task 2",
-      "priority": "high",
-      "completed": false
-    },
-    {
-      "id": "bfcddf10-2c87-4f6e-b70f-1a31257ff15c",
+      "id": "3a823c64-07cf-44f6-a4d9-a1f46b40a641",
       "title": "Task 3",
       "description": "Task 3",
-      "priority": "medium",
-      "completed": false
+      "priority": "high",
+      "completed": true
     },
     {
-      "id": "ad716d31-59e3-4b24-bca5-e8a9a8e737a1",
+      "id": "7d0c3b95-2858-4869-bd0f-d6efe5cbf3a6",
       "title": "Task 4",
       "description": "Task 4",
+      "priority": "medium",
+      "completed": true
+    },
+    {
+      "id": "1e88214e-d536-416c-9e61-8110f5241da8",
+      "title": "Task 2",
+      "description": "Task 2",
       "priority": "low",
       "completed": false
     },
     {
-      "id": "56f0032d-8383-47cf-bbbc-b013731a9ec8",
+      "id": "23e4bcb4-58f3-4881-80bd-b0cb641a0439",
       "title": "Task 5",
       "description": "Task 5",
       "priority": "medium",
       "completed": false
     },
     {
-      "id": "2130dcd7-5c7b-4fed-a1f6-8cd84f6294a4",
+      "id": "1b2fffcf-cfd3-428c-b221-1f3648a4f997",
       "title": "Task 6",
       "description": "Task 6",
-      "priority": "low",
+      "priority": "high",
       "completed": false
     },
     {
-      "id": "1ded1653-add7-43d5-9524-7ed0350af10e",
-      "title": "Task 1",
-      "description": "Task 1",
+      "id": "ca9aff1e-6e4b-4195-8f4d-200db6642393",
+      "title": "Task 7",
+      "description": "Task 7",
       "priority": "medium",
       "completed": false
     },
     {
-      "id": "3613ae92-3f8c-42f7-8468-329c9e967589",
-      "title": "Task 4",
-      "description": "Task 4",
+      "id": "8e5061c6-b8ac-4812-b5d7-f97d6bee7a10",
+      "title": "Task 8",
+      "description": "Task 8",
       "priority": "low",
-      "completed": false
+      "completed": true
     }
   ]
 }

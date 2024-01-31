@@ -45,10 +45,7 @@ export const Cards = () => {
   return (
     <div className="card-container">
       {sortedData.map((item) => (
-        <IndividualCard
-          key={item.id}
-          todo={item}
-        />
+        <IndividualCard key={item.id} todo={item} />
       ))}
     </div>
   );

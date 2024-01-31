@@ -17,7 +17,7 @@ export const addTodo = (
   },
 });
 
-export const deleteTodo = (todo  : Todo) => ({
+export const deleteTodo = (todo: Todo) => ({
   type: actionTypes.DELETE_TODO,
   payload: {
     todo,
@@ -35,7 +35,6 @@ export const setFilter = (filter: string) => ({
   type: actionTypes.SET_FILTER,
   payload: { filter },
 });
-
 
 export const editTodo = (
   id: string,
@@ -57,19 +56,17 @@ export const updateFromIndexeddb = (todos: Todo[]) => ({
   payload: { todos },
 });
 
-
-export const revertAddTodoOperation= (id : string) => ({
+export const revertAddTodoOperation = (id: string) => ({
   type: actionTypes.ADDING_TO_DB_FAILED,
   payload: { id },
 });
 
-
-export const revertDeleteTodoOperation= (todo : Todo) => ({
+export const revertDeleteTodoOperation = (todo: Todo) => ({
   type: actionTypes.DELETION_FROM_DB_FAILED,
   payload: { todo },
 });
 
-export const revertEditTodoOperation= (todo : Todo) => ({
+export const revertEditTodoOperation = (todo: Todo) => ({
   type: actionTypes.EDIT_IN_DB_FAILED,
   payload: { todo },
 });

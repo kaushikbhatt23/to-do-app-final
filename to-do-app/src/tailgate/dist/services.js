@@ -90,94 +90,113 @@ var subscribeToTodoEvents = function () {
     }); });
     // Subscribe to the 'newTodoAdded' event
     var addSubscriptionToken = pubsub_1["default"].subscribe("addTodo", function (topic, data) { return __awaiter(void 0, void 0, void 0, function () {
-        var firstTrySuccessful, error;
+        var firstTrySuccessful, error_3, error;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     firstTrySuccessful = false;
-                    try {
-                        todoService.addTodo(data.todo); // add to indexeddb
-                        firstTrySuccessful = true;
-                    }
-                    catch (error) {
-                        pubsub_1["default"].publish("addingTodoFailed", data.todo.id);
-                        console.log(error);
-                    }
-                    if (!firstTrySuccessful) return [3 /*break*/, 2];
-                    return [4 /*yield*/, api_1.addTodo(data.todo)];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, todoService.addTodo(data.todo)];
+                case 2:
+                    _a.sent(); // add to indexeddb
+                    firstTrySuccessful = true;
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_3 = _a.sent();
+                    pubsub_1["default"].publish("addingTodoFailed", data.todo.id); // addition to indexeddb failed so revert changes
+                    console.log(error_3);
+                    return [3 /*break*/, 4];
+                case 4:
+                    if (!firstTrySuccessful) return [3 /*break*/, 6];
+                    return [4 /*yield*/, api_1.addTodo(data.todo)];
+                case 5:
                     error = (_a.sent()).error;
                     if (error) {
-                        todoService.deleteTodo(data.todo.id);
+                        todoService.deleteTodo(data.todo.id); // addition to server failed so revert changes
                         pubsub_1["default"].publish("addingTodoFailed", data.todo.id);
                     }
                     else {
                         console.log("Todo added at server successfully");
                     }
-                    _a.label = 2;
-                case 2: return [2 /*return*/];
+                    _a.label = 6;
+                case 6: return [2 /*return*/];
             }
         });
     }); });
     // Subscribe to the 'todoDeleted' event
     var deleteSubscriptionToken = pubsub_1["default"].subscribe("deleteTodo", function (topic, data) { return __awaiter(void 0, void 0, void 0, function () {
-        var firstTrySuccessful, error;
+        var firstTrySuccessful, error_4, error;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     firstTrySuccessful = false;
-                    try {
-                        todoService.deleteTodo(data.todo.id);
-                        firstTrySuccessful = true;
-                    }
-                    catch (error) {
-                        console.log(error.message);
-                        pubsub_1["default"].publish("deletingTodoFailed", data.todo);
-                    }
-                    if (!firstTrySuccessful) return [3 /*break*/, 2];
-                    return [4 /*yield*/, api_1.deleteTodo(data.todo.id)];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, todoService.deleteTodo(data.todo.id)];
+                case 2:
+                    _a.sent(); // delete todo from indexeddb
+                    firstTrySuccessful = true;
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_4 = _a.sent();
+                    console.log(error_4.message); // deletion of todo on indexeddb failed so revert changes on ui
+                    pubsub_1["default"].publish("deletingTodoFailed", data.todo);
+                    return [3 /*break*/, 4];
+                case 4:
+                    if (!firstTrySuccessful) return [3 /*break*/, 6];
+                    return [4 /*yield*/, api_1.deleteTodo(data.todo.id)];
+                case 5:
                     error = (_a.sent()).error;
                     if (error) {
-                        todoService.addTodo(data.todo);
+                        todoService.addTodo(data.todo); // if deletion from server fails then  revert changes
                         pubsub_1["default"].publish("deletingTodoFailed", data.todo);
                     }
                     else {
                         console.log("Todo deleted at server successfully");
                     }
-                    _a.label = 2;
-                case 2: return [2 /*return*/];
+                    _a.label = 6;
+                case 6: return [2 /*return*/];
             }
         });
     }); });
     // Subscribe to the 'todoEdited' event
     var editSubscriptionToken = pubsub_1["default"].subscribe("editTodo", function (topic, data) { return __awaiter(void 0, void 0, void 0, function () {
-        var firstTrySuccessful, error;
+        var firstTrySuccessful, error_5, error;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     firstTrySuccessful = false;
-                    try {
-                        todoService.editTodo(data.updatedTodo);
-                        firstTrySuccessful = true;
-                    }
-                    catch (error) {
-                        pubsub_1["default"].publish("editingTodoFailed", data.previousTodo);
-                        console.log(error.message);
-                    }
-                    if (!firstTrySuccessful) return [3 /*break*/, 2];
-                    return [4 /*yield*/, api_1.updateTodo(data.updatedTodo.id, data.updatedTodo)];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, todoService.editTodo(data.updatedTodo)];
+                case 2:
+                    _a.sent(); // update on indexeddb
+                    firstTrySuccessful = true;
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_5 = _a.sent();
+                    pubsub_1["default"].publish("editingTodoFailed", data.previousTodo); // if update on indexeddb fails then revert changes on ui
+                    console.log(error_5.message);
+                    return [3 /*break*/, 4];
+                case 4:
+                    if (!firstTrySuccessful) return [3 /*break*/, 6];
+                    return [4 /*yield*/, api_1.updateTodo(// update on server 
+                        data.updatedTodo.id, data.updatedTodo)];
+                case 5:
                     error = (_a.sent()).error;
-                    if (error) {
+                    if (error) { // if update on server fails then revert changes 
                         todoService.editTodo(data.previousTodo);
                         pubsub_1["default"].publish("editingTodoFailed", data.previousTodo);
                     }
                     else {
                         console.log("Todo updated at server successfully");
                     }
-                    _a.label = 2;
-                case 2: return [2 /*return*/];
+                    _a.label = 6;
+                case 6: return [2 /*return*/];
             }
         });
     }); });
